@@ -1,4 +1,7 @@
-def call(){
-  dependencyCheck additionalArguments: '--scan ./', odcInstallation: 'OWASP'
-  dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+def call() {
+    withCredentials([string(credentialsId: 'nvd-api-key', variable: 'NVD_API_KEY')]) {
+        dependencyCheck additionalArguments: "--scan . --format XML --project bitlinks --nvdApiKey ${NVD_API_KEY} --nvdApiDelay 6000", 
+                         odcInstallation: 'DP-Check'
+    }
+    dependencyCheckPublisher pattern: 'dependency-check-report.xml'
 }
